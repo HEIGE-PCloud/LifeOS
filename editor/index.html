@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game of Life Editor</title>
+    <style>
+      .row {
+        display: flex;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="number" placeholder="width" id="widthInput" value="192" />
+    <input type="number" placeholder="height" id="heightInput" value="108" />
+    <button id="submit">Submit</button>
+    <button id="build">Build</button>
+    <main></main>
+    <script>
+      function createColumn(i, j) {
+        const col = document.createElement("div");
+        col.classList.add("col");
+        const input = document.createElement("input");
+        col.dataset.y = i;
+        col.dataset.x = j;
+        input.type = "checkbox";
+        col.appendChild(input);
+        return col;
+      }
+      function createRows(x, col) {
+        const row = document.createElement("div");
+        for (let i = 0; i < col; i++) {
+          row.appendChild(createColumn(x, i));
+        }
+        row.classList.add("row");
+        return row;
+      }
+      const submitBtn = document.getElementById("submit");
+      const widthInput = document.getElementById("widthInput");
+      const heightInput = document.getElementById("heightInput");
+      const buildBtn = document.getElementById("build");
+      const main = document.querySelector("main");
+      submitBtn.addEventListener("click", () => {
+        window.width = widthInput.value;
+        window.height = heightInput.value;
+        for (let i = 0; i < window.height; i++) {
+          main.appendChild(createRows(i, window.width));
+        }
+      });
+      buildBtn.addEventListener('click', () => {
+        const boxes = document.querySelectorAll('.col');
+        code = "(pos_t[]){\n"
+        for (let i = 0; i < boxes.length; i++) {
+            if (boxes[i].children[0].checked) {
+                code += `{${boxes[i].dataset.x}, ${boxes[i].dataset.y}},\n`
+                {{/*  console.log(`  set_cell(${boxes[i].dataset.x}, ${boxes[i].dataset.y}, 1);`)  */}}
+            }
+        }
+        code += "};"
+        console.log(code)
+    })
+    </script>
+  </body>
+</html>
